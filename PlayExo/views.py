@@ -13,6 +13,8 @@ from PlayExo.models import *
 logger = logging.getLogger(__name__)
 
 
+
+
 def pl_view(request, pltp_name, pl_name):
     current_tp = get_object_or_404(Loaded_Pltp, name=pltp_name)
     current_pl = get_object_or_404(Loaded_Pl, name=pl_name)

@@ -5,7 +5,7 @@ from os.path import basename, isdir
 
 from django.shortcuts import render, redirect
 
-from gitload.base import Repository
+from gitload.repository import Repository
 from gitload.settings import DEFAULT_REPO
 
 from serverpl.settings import MEDIA_ROOT

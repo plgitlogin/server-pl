@@ -226,3 +226,4 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'tmp')
 MEDIA_URL = '/tmp/'
 
+DIRREPO=os.path.join(PROJECT_DIR,'../../../repo')

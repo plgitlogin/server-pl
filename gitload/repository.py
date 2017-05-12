@@ -3,10 +3,13 @@
 #
 #
 
-import os
+import os,shutil,git
 
 from serverpl.settings import DIRREPO
 
+from os.path import basename, isfile, isdir, splitext
+
+from gitload.base import PLTP_Loader
 
 class Repository():
     
