@@ -3,7 +3,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 
-from mysite.settings import MEDIA_ROOT
+from serverpl.settings import MEDIA_ROOT
 
 from gitload.models import Loaded_Pltp, Loaded_Pl
 
@@ -12,14 +12,6 @@ from PlayExo.models import *
 
 logger = logging.getLogger(__name__)
 
-def index(request):
-    tp_lst = Loaded_Pltp.objects.order_by('name')
-    
-    context = dict()
-    context["index"] = True
-    context["tp_lst"] = tp_lst
-
-    return render(request, 'PlayExo/default_struct.html', context)
 
 def pl_view(request, pltp_name, pl_name):
     current_tp = get_object_or_404(Loaded_Pltp, name=pltp_name)
