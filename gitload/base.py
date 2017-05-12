@@ -4,7 +4,7 @@ import os, sys, shutil, git, re, json, time, logging, subprocess, pathlib, hashl
 
 from os.path import basename, isfile, isdir, splitext
 
-from mysite.settings import MEDIA_ROOT
+from serverpl.settings import MEDIA_ROOT
 
 from gitload.models import Loaded_Pltp, Loaded_Pl
 from gitload.plrequest import SanboxSession
