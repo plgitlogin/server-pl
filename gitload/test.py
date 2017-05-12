@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 from gitload.base import Repository, PLTP_Loader
 from gitload.models import Loaded_Pltp, Loaded_Pl
 
-from mysite.settings import MEDIA_ROOT
+from serverpl.settings import MEDIA_ROOT
 
 
 
