@@ -1,0 +1,28 @@
+<!-- Load the tag library -->
+{% load bootstrap3 %}
+{% load static %}
+
+<!-- Load CSS and JavaScript -->
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+<!-- Top Bar -->
+{% include "PlayExo/top_bar.html" %}
+
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-2">
+        <!-- Navigation -->
+        {% include "PlayExo/nav.html" %}
+        <br>
+    </div>
+    <div class="col-md-6">
+        <!-- PL informations -->
+        {% include "PlayExo/pl_info.html" %}
+        <br>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+

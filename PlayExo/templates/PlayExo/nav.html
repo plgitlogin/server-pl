@@ -1,0 +1,34 @@
+
+
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+
+<div id="btn-group-toggle" class="btn-group">
+    
+    <!-- PLTP -->
+    <a href="/PlayExo/pltp/{{ pltp_name }}" type="button" class="btn btn-default btn-lg">{{ pltp_name }}</a>
+    
+    <!-- Every PL -->
+    {% for pl in pl_list %}
+        {% if pl_name == pl.name %}
+            <a href="/PlayExo/pl/{{ pltp_name }}/{{ pl.name }}" type="button" class="btn btn-info btn-lg active">{{ pl.name }}</a>
+        {% else %}
+            <a href="/PlayExo/pl/{{ pltp_name }}/{{ pl.name }}" type="button" class="btn btn-info btn-lg">{{ pl.name }}</a>
+        {% endif %}
+    {% endfor %}
+    
+    
+    <script>
+        var wideScreen = 990;
+        var toggleBtnGroup = function() {
+            var windowWidth = $(window).width();
+              
+            if(windowWidth > wideScreen) {
+                $('#btn-group-toggle').addClass('btn-group-vertical').removeClass('btn-group');
+            } else {
+                $('#btn-group-toggle').addClass('btn-group').removeClass('btn-group-vertical');
+            }
+        }
+        toggleBtnGroup(); // trigger on load
+        window.addEventListener('resize',toggleBtnGroup); // change on resize
+    </script>
+</div>

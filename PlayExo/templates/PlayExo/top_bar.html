@@ -1,0 +1,26 @@
+
+
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header" style="margin-left: 16.3%">
+            <a class="navbar-brand" href="#">Premier Langage</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right" style="margin-right: 15%">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-user"></span> 
+                    {{ username }}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><span class="glyphicon glyphicon-send"></span>&emsp;{{ user.email }}</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

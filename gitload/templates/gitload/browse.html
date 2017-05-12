@@ -1,0 +1,105 @@
+<!-- LOADING -->
+{% load static %}
+{% load index %}
+
+<!-- STYLESHEETS -->
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static "gitload/css/screen.css" %}" />
+{% endblock %}
+
+<!-- CONTENT -->
+{% block content %}
+    <section id="grp-changelist">
+            <form action="" method="POST">
+            {% csrf_token %}
+        <div class="grp-group grp-stacked">
+            <!-- BREADCRUMB -->
+            <h2><b>
+                <!-- PATH TO CURRENT -->
+                {% for part in breadcrumb %}
+                    <button class="grp-button" name="git_path" type="submit" value="{{ breadcrumb_value|index:forloop.counter0 }}">
+                        {{ part }}/
+                    </button>
+                {% endfor %}
+                
+                <!-- REFRESH LOCAL REPO -->
+                <ul class="grp-object-tools" style="margin-top: 40px;">
+                    <li><a href="/gitload/">Changer de Dépot</a></li>
+                </ul>
+            </b></h2>
+            
+            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
+            
+            <!-- DIRECTORIES -->
+            {% for dirs in repository.local_dir_list %}
+                <button class="grp-module" type="submit" name="git_path" value="{{ rel_path }}{{ dirs }}" />
+                        <h3>{{ dirs }}/</h3>
+                </button>
+            {% endfor %}
+            
+            {% if repository.local_dir_list %}
+                <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
+            {% endif %}
+            </form>
+            
+            <!-- PLTPS -->
+            {% for pltps in repository.local_pltp_list %}
+                <div class="grp-module">
+                    <div class="grp-row grp-cells">
+                        <div class="grp-cell" style="width: 250%;"/> <!-- File's Name -->
+                            <h3>{{ pltps }}</h3>
+                        </div>
+                        <div class="grp-cell" style="width: 250%;"/> <!-- 'Charger' button -->
+                            <form action="" method="POST">
+                            {% csrf_token %}
+                                <button class="grp-button" type="submit" name="exported" value="/{{ rel_path }}{{ pltps }}" />
+                                Charger
+                                </button>
+                            </form>
+                        </div>
+                        <div class="grp-cell" style="width: 250%;"/> <!-- 'Voir' button -->
+                            <form action="/gitload/view_file/" method="POST" target="_blank">
+                            {% csrf_token %}
+                                <button class="grp-button" type="submit" name="file_path" value="/{{ path }}{{ pltps }}" />
+                                    Voir
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            {% if repository.local_pltp_list %}
+                <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
+            {% endif %}
+            
+            <!-- OTHERS -->
+            {% for others in repository.local_other_list %}
+                <form action="/gitload/view_file/" method="POST" target="_blank">
+                {% csrf_token %}
+                    <div class="grp-module">
+                        <div class="grp-row grp-cells">
+                            <div class="grp-cell" style="width: 250%;"/> <!-- File's Name -->
+                                <h3>{{ others }}</h3>
+                            </div>
+                            <div class="grp-cell" style="width: 250%;"/> <!-- 'Voir' button -->
+                                <button class="grp-button" type="submit" name="file_path" value="/{{ path }}{{others }}" />
+                                    Voir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {% endfor %}
+            
+            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
+            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
+            
+            <!-- VERSION -->
+            <div class="grp-module">
+                <div class="grp_row" align="right" style="padding-right: 20px;">{{ version }}</div> <!-- BLANK LINE -->
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

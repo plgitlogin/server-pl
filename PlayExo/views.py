@@ -1,0 +1,69 @@
+# coding: utf-8
+
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
+
+from mysite.settings import MEDIA_ROOT
+
+from gitload.models import Loaded_Pltp, Loaded_Pl
+
+import json, logging
+from PlayExo.models import *
+
+logger = logging.getLogger(__name__)
+
+def index(request):
+    tp_lst = Loaded_Pltp.objects.order_by('name')
+    
+    context = dict()
+    context["index"] = True
+    context["tp_lst"] = tp_lst
+
+    return render(request, 'PlayExo/default_struct.html', context)
+
+def pl_view(request, pltp_name, pl_name):
+    current_tp = get_object_or_404(Loaded_Pltp, name=pltp_name)
+    current_pl = get_object_or_404(Loaded_Pl, name=pl_name)
+    pl_list = current_tp.loaded_pl_set.all()
+    
+    info = json.loads(current_pl.json)
+    query = studentCode.objects.filter(student = request.user.username, pl = pl_name)
+    code = ""
+    custom_code = False
+    if query.first():
+        custom_code = True
+        code = query.first().student_code
+    
+    dic = {
+        "info": info,
+        "custom_code": custom_code,
+        "code": code,
+        "pl_list": pl_list,
+        "pltp_name": pltp_name,
+        "pl_name": pl_name,
+        "username": request.user.get_full_name(),
+    }
+    
+    return render(request, 'PlayExo/pl.html', dic)
+
+def pltp_view(request, pltp_name):
+    current_tp = get_object_or_404(Loaded_Pltp, name=pltp_name)
+    pl_list = current_tp.loaded_pl_set.all()
+    
+    info = current_tp.json
+    
+    return render(request, 'PlayExo/pltp.html', {
+        "info": info,
+        "pl_list": pl_list,
+        "pltp_name": pltp_name,
+        "username": request.user.get_full_name(),
+    })
+
+def lti_receiver(request, sha1):
+    if (not request.user.is_authenticated):
+        return HttpResponse('User not authenticated throught LTI', status=401)
+        
+    pltp = get_object_or_404(Loaded_Pltp, sha1=sha1)
+    
+    return redirect(pltp_view, pltp.name)
+        

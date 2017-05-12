@@ -1,0 +1,13 @@
+gitpython
+django-markdown-deux
+django
+mock
+gunicorn
+dj-database-url
+whitenoise
+psycopg2
+oauth2
+django-bootstrap3
+jsonfield
+requests
+jinja2

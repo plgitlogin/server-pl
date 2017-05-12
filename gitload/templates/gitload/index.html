@@ -1,0 +1,52 @@
+<!-- LOADING -->
+{% load admin_static %}
+{% load index %}
+
+<!-- STYLESHEETS -->
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static "gitload/css/screen.css" %}" />
+{% endblock %}
+
+<!-- CONTENT -->
+{% block content %}
+    <section id="grp-changelist">
+            <form action="" method="POST">
+            {% csrf_token %}
+        <div class="grp-group grp-stacked">
+            <h2>Choisissez un Dépot</h2>
+            
+            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
+            
+            <!-- DEFAULT REPO -->
+            <div class="grp-module"><h2>Dépot par Défaut</h2></div>
+            {% for repo in default_repo %}
+                <button class="grp-module" type="submit" name="repo_url" value="{{ repo.1 }}" />
+                        ->  {{ repo.1 }}
+                </button>
+            {% endfor %}
+            </div>
+            </form>
+            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
+            
+            <!-- CUSTOM REPO -->
+            <form action="" method="POST">
+            {% csrf_token %}
+                <fieldset class="grp-module">
+                    <h2>Par Adresse:</h2>
+                    <div class="grp-row">
+                        <div class="l-2c-fluid l-d-4">
+                            <div class="c-1"><label>Adresse:</label></div>
+                            <div class="c-2"><input type="text" name="repo_url" class="vTextField" /></div>
+                        </div>
+                    </div>
+                    {% if error %}
+                        <div class="grp-row">
+                             <FONT color="red">{{ error }}</FONT>
+                        </div>
+                    {% endif %}
+                </fieldset>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+

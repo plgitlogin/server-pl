@@ -1,0 +1,10 @@
+*pyc
+__pycache__/
+mysite/tmp/*
+mysite/staticfiles/*
+staticfiles/*
+sandbox/env/*
+db.sql*
+*.json
+*.log
+migrations/*
