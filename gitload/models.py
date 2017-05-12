@@ -1,6 +1,6 @@
 import os, shutil
 
-from mysite.settings import MEDIA_ROOT
+from serverpl.settings import MEDIA_ROOT
 
 from jsonfield import JSONField
 
