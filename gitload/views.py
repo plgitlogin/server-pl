@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from gitload.base import Repository
 from gitload.settings import DEFAULT_REPO
 
-from mysite.settings import MEDIA_ROOT
+from serverpl.settings import MEDIA_ROOT
 
 
 
