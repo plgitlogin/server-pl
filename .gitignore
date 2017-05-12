@@ -1,7 +1,7 @@
 *pyc
 __pycache__/
-mysite/tmp/*
-mysite/staticfiles/*
+server-pl/tmp/*
+server-pl/staticfiles/*
 staticfiles/*
 sandbox/env/*
 db.sql*
