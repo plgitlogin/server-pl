@@ -3,7 +3,7 @@ from django.shortcuts import render,get_object_or_404
 from django.template import loader
 from django.http import HttpResponse,Http404
 
-from mysite.settings import MEDIA_ROOT, PROJECT_DIR
+from serverpl.settings import MEDIA_ROOT, PROJECT_DIR
 from gitload.models import *
 from PlayExo.models import *
 from shutil import copyfile
