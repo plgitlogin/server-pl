@@ -40,7 +40,9 @@ class PLTP_Loader():
         self.pl = self._get_pl_list()
         for pl in self.pl:
             pl[1], pl[2] = self._check_pl(pl[0])
-        self._add_to_db()
+        url = self._add_to_db()
+        
+        return url
     
     
     def _add_to_db(self):
@@ -68,6 +70,8 @@ class PLTP_Loader():
             else:
                 pl = pl[0]
             pl.pltp.add(pltp)
+        
+        return url
 
 
     def _check_pltp(self, sandboxurl=SANDBOX_URL):

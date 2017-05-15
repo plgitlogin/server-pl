@@ -31,7 +31,7 @@ def execute(request, pltp_name, pl_name):
     else:
         print("--------edit ----------")
         query.first().student_code = code
-	
+    
     
     # ----------------
     

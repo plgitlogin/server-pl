@@ -1,52 +1,65 @@
-<!-- LOADING -->
-{% load admin_static %}
-{% load index %}
+<!-- Load the tag library -->
+{% load bootstrap3 %}
+{% load static %}
 
-<!-- STYLESHEETS -->
-{% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static "gitload/css/screen.css" %}" />
-{% endblock %}
+<!-- Load CSS and JavaScript -->
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
 <!-- CONTENT -->
-{% block content %}
-    <section id="grp-changelist">
-            <form action="" method="POST">
-            {% csrf_token %}
-        <div class="grp-group grp-stacked">
-            <h2>Choisissez un Dépot</h2>
-            
-            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
-            
-            <!-- DEFAULT REPO -->
-            <div class="grp-module"><h2>Dépot par Défaut</h2></div>
-            {% for repo in default_repo %}
-                <button class="grp-module" type="submit" name="repo_url" value="{{ repo.1 }}" />
-                        ->  {{ repo.1 }}
-                </button>
-            {% endfor %}
-            </div>
-            </form>
-            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
-            
-            <!-- CUSTOM REPO -->
-            <form action="" method="POST">
-            {% csrf_token %}
-                <fieldset class="grp-module">
-                    <h2>Par Adresse:</h2>
-                    <div class="grp-row">
-                        <div class="l-2c-fluid l-d-4">
-                            <div class="c-1"><label>Adresse:</label></div>
-                            <div class="c-2"><input type="text" name="repo_url" class="vTextField" /></div>
+<div class="row">
+    <div class=col-md-2></div>
+    <div class=col-md-8>
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading">Choisissez un Dépot</div>
+            <div class="panel-body">
+                
+                {% if error != "" %}
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                        
+                <!-- DEFAULT REPO -->
+                <form action="" method="POST"> 
+                    {% csrf_token %}
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><span class="glyphicon glyphicon-home"></span> Dépot par Défaut</div>
+                        <div class="panel-body">
+                            {% for repo in default_repo %}
+                                <button type="submit" class="btn btn-primary btn-block" name="repo_name" value="{{ repo }}" style="text-align: left"/>
+                                        <span class="glyphicon glyphicon-arrow-right"></span><b>&emsp;{{ repo }}
+                                </button>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% if error %}
-                        <div class="grp-row">
-                             <FONT color="red">{{ error }}</FONT>
+                </form>
+                
+                <!-- REPO FROM URL -->
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><span class="glyphicon glyphicon-download-alt"></span> Dépot par Adresse</div>
+                        <div class="panel-body">
+                            
+                            {% if error == "" %}
+                                <div class="input-group">
+                                    <span class="input-group-addon">URL:</span>
+                                    <input id="msg" type="text" class="form-control" name="repo_url" placeholder="https://githost.com/repository.git">
+                                </div>
+                            {% else %}
+                                <div class="input-group has-error has-feedback">
+                                    <span class="input-group-addon">URL:</span>
+                                    <input type="text" class="form-control" id="inputError2" name="repo_url" placeholder="https://githost.com/repository.git">
+                                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                </div>
+                            {%endif %}
                         </div>
-                    {% endif %}
-                </fieldset>
-            </form>
+                    </div>
+                </form>
+                
+            </div>
         </div>
-    </section>
-{% endblock %}
-
+    <div class=col-md-2></div>
+</div>

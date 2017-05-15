@@ -1,32 +1,46 @@
 # coding: utf-8
 
 import os, re, shutil, git
-from os.path import basename, isdir
+from os.path import basename, isdir, splitext
 
 from django.shortcuts import render, redirect
 
 from gitload.repository import Repository
 from gitload.settings import DEFAULT_REPO
 
-from serverpl.settings import MEDIA_ROOT
+from serverpl.settings import DIRREPO
 
 
 
 def index(request):
-    """ View for [...]/gitload/ -- template: index.html """
-    error = None
+    """ View for /gitload/ -- template: index.html """
+    repo = list()
+    for (path, subdirs, files) in os.walk(DIRREPO):    
+        for filename in subdirs:
+            repo.append(filename)
+        break
+    
+    error = ""
+    
     if (request.method == 'POST'):
         repo_url = request.POST.get('repo_url', "")
+        repo_name = request.POST.get('repo_name', "")
+        
+        if (repo_name != ""):
+            repository = Repository(repo_name)
+            
         if (repo_url != ""):
-            repository = Repository(repo_url)
-            if (repository.get_repo()):
-                request.session["repository"] = repository.__dict__
-                return redirect(browse)
-            shutil.rmtree(repository.local_root)
-            error = "Dépot '" + repository.url + "' introuvable. Merci de vérifier l'adresse ou votre connexion internet."
+            repository = Repository(splitext(basename(repo_url))[0], url=repo_url)
+            if (not repository.get_repo()):
+                shutil.rmtree(repository.root)
+                error = "Dépot '" + repository.url + "' introuvable. Merci de vérifier l'adresse ou votre connexion internet."
+        
+        if ((repo_name != "" or repo_url != "") and error == ""):
+            request.session["repository"] = repository.__dict__
+            return redirect(browse)
     
     return render(request, "gitload/index.html", {
-        "default_repo": DEFAULT_REPO,
+        "default_repo": repo,
         "error": error,
     })
 
@@ -36,10 +50,10 @@ def browse(request):
     if (not "repository" in request.session):
         return redirect(index)
     
-    dic = request.session["repository"]
+    repository = Repository(None, dic=request.session["repository"])
+    confirmation = ""
+    error = ""
     
-    repository = Repository("", dic)
-        
     if (request.method == 'POST'):
         git_path = request.POST.get('git_path', "")
         if (git_path != ""):
@@ -47,21 +61,21 @@ def browse(request):
         
         pltp_path = request.POST.get('exported', "")
         if (pltp_path != ""):
-            repository.load_pltp(pltp_path)
-            return redirect(browse)
+            confirmation = repository.load_pltp(pltp_path)
+            if (confirmation == ""):
+                error = "Erreur lors du chargement de " + pltp_path
+        
+        if (request.POST.get('refresh', False)):
+            repository.refresh_repo()
     
-    repository.refresh_repo()
     repository.parse_content()
     
-    #Truncate the path to only keep the path relative to repo.root
-    path = repository.local_current_path[repository.local_current_path.find(repository.name):]
+    ####Creating breadcrumb####
+    path = repository.current_path[repository.current_path.find(repository.name):]
     rel_path = path[len(repository.name)+1:]
-    
     if (path[-1] != '/'):
         path += '/'
-    
     breadcrumb = path.split('/')[:-1];
-    
     breadcrumb_value = list()
     for i in range(0, len(breadcrumb)):
         if (i == 0):
@@ -73,16 +87,14 @@ def browse(request):
             if (breadcrumb_value[i][0] == '/' and len(breadcrumb_value[i]) > 1):
                 breadcrumb_value[i] = breadcrumb_value[i][1:]
     
-    repo = git.Repo(repository.local_root)
-    version = repo.heads.master.commit.name_rev
-    
     return render(request, 'gitload/browse.html', {
         'path': path,
         'rel_path': rel_path,
         'repository': repository,
         'breadcrumb': breadcrumb,
         'breadcrumb_value': breadcrumb_value,
-        'version': version,
+        'error': error,
+        'confirmation': confirmation,
     })
 
 
@@ -92,7 +104,7 @@ def view_file(request):
         file_path = request.POST.get('file_path', "")
         
         if (file_path != ""):
-            readed_file = open(MEDIA_ROOT+file_path, "r")
+            readed_file = open(DIRREPO+file_path, "r")
             lines = list()
             for line in readed_file:
                 lines.append(line)

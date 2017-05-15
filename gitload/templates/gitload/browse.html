@@ -1,105 +1,120 @@
-<!-- LOADING -->
+<!-- Load the tag library -->
+{% load bootstrap3 %}
 {% load static %}
 {% load index %}
 
-<!-- STYLESHEETS -->
-{% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static "gitload/css/screen.css" %}" />
-{% endblock %}
+<!-- Load CSS and JavaScript -->
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
-<!-- CONTENT -->
-{% block content %}
-    <section id="grp-changelist">
-            <form action="" method="POST">
-            {% csrf_token %}
-        <div class="grp-group grp-stacked">
-            <!-- BREADCRUMB -->
-            <h2><b>
-                <!-- PATH TO CURRENT -->
-                {% for part in breadcrumb %}
-                    <button class="grp-button" name="git_path" type="submit" value="{{ breadcrumb_value|index:forloop.counter0 }}">
-                        {{ part }}/
-                    </button>
-                {% endfor %}
+<div class="row">
+    <div class=col-md-2></div>
+    <div class=col-md-8>
+        
+        <div class="panel panel-primary">
                 
-                <!-- REFRESH LOCAL REPO -->
-                <ul class="grp-object-tools" style="margin-top: 40px;">
-                    <li><a href="/gitload/">Changer de Dépot</a></li>
-                </ul>
-            </b></h2>
-            
-            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
-            
-            <!-- DIRECTORIES -->
-            {% for dirs in repository.local_dir_list %}
-                <button class="grp-module" type="submit" name="git_path" value="{{ rel_path }}{{ dirs }}" />
-                        <h3>{{ dirs }}/</h3>
-                </button>
-            {% endfor %}
-            
-            {% if repository.local_dir_list %}
-                <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
-            {% endif %}
-            </form>
-            
-            <!-- PLTPS -->
-            {% for pltps in repository.local_pltp_list %}
-                <div class="grp-module">
-                    <div class="grp-row grp-cells">
-                        <div class="grp-cell" style="width: 250%;"/> <!-- File's Name -->
-                            <h3>{{ pltps }}</h3>
-                        </div>
-                        <div class="grp-cell" style="width: 250%;"/> <!-- 'Charger' button -->
-                            <form action="" method="POST">
-                            {% csrf_token %}
-                                <button class="grp-button" type="submit" name="exported" value="/{{ rel_path }}{{ pltps }}" />
-                                Charger
-                                </button>
-                            </form>
-                        </div>
-                        <div class="grp-cell" style="width: 250%;"/> <!-- 'Voir' button -->
-                            <form action="/gitload/view_file/" method="POST" target="_blank">
-                            {% csrf_token %}
-                                <button class="grp-button" type="submit" name="file_path" value="/{{ path }}{{ pltps }}" />
-                                    Voir
-                                </button>
-                            </form>
-                        </div>
+                <!-- BREADCRUMB AND REFRESH/CHANGE REPO-->
+                <div class="panel-heading">
+                    <div class="row">
+                        <form class="form-inline" style="margin-bottom: 0" action="" method="POST">
+                            <div class="col-sm-12">
+                                {% for part in breadcrumb %}
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-info" name="git_path" value="{{ breadcrumb_value|index:forloop.counter0 }}">
+                                        <b>{{ part }}/</b>
+                                    </button>
+                                {% endfor %}
+                                <div class="btn-group pull-right">
+                                    <button type="submit" class="btn btn-default" name="refresh" value="True">
+                                        <span class="glyphicon glyphicon-refresh"></span> Actualiser
+                                    </button>
+                                    <a href="/gitload/" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-arrow-left"></span> Changer de Dépot
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            {% endfor %}
-            
-            {% if repository.local_pltp_list %}
-                <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
-            {% endif %}
-            
-            <!-- OTHERS -->
-            {% for others in repository.local_other_list %}
-                <form action="/gitload/view_file/" method="POST" target="_blank">
-                {% csrf_token %}
-                    <div class="grp-module">
-                        <div class="grp-row grp-cells">
-                            <div class="grp-cell" style="width: 250%;"/> <!-- File's Name -->
-                                <h3>{{ others }}</h3>
-                            </div>
-                            <div class="grp-cell" style="width: 250%;"/> <!-- 'Voir' button -->
-                                <button class="grp-button" type="submit" name="file_path" value="/{{ path }}{{others }}" />
-                                    Voir
-                                </button>
-                            </div>
+        
+                <!-- CURRENT DIR CONTENT -->
+                <div class="panel-body">
+                    
+                    {% if error != "" %}
+                        <div class="alert alert-danger">
+                            {{ error }}
                         </div>
+                    {% elif confirmation != "" %}
+                        <div class="alert alert-success">
+                            PLTP chargé à l'url: {{ confirmation }}
+                        </div>
+                    {% endif %}
+                
+                    <!-- DIRECTORIES -->
+                    <div class="form-group">
+                        {% for dirs in repository.dir_list %}
+                            <form style="margin-bottom: 0" action="" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-block" style="text-align: left" name="git_path" value="{{ rel_path }}{{ dirs }}">
+                                    <span class="glyphicon glyphicon-arrow-right"></span>&emsp;<b>{{ dirs }}/</b>
+                                </button>
+                            </form>
+                        {% endfor %}
                     </div>
-                </form>
-            {% endfor %}
-            
-            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
-            <div class="grp_row">&nbsp;</div> <!-- BLANK LINE -->
-            
-            <!-- VERSION -->
-            <div class="grp-module">
-                <div class="grp_row" align="right" style="padding-right: 20px;">{{ version }}</div> <!-- BLANK LINE -->
-            </div>
+                    <!----------------->
+                    
+                    <!-- PLTPs -->
+                    <div class="form-group">
+                        {% for pltps in repository.pltp_list %}
+                            <div class=row>
+                                <div class="col-sm-10" style="padding-right: 0">
+                                    <form style="margin-bottom: 0" action="" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary btn-block" style="text-align: left" name="exported" value="/{{ rel_path }}{{ pltps }}">
+                                            <span class="glyphicon glyphicon-download"></span>&emsp;<b>{{ pltps }}</b>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-sm-2" style="padding-left: 0">
+                                    <form style="margin-bottom: 0" action="/gitload/view_file/" method="POST" target="_blank">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-default btn-block" name="file_path" value="/{{ path }}{{ pltps }}">
+                                            <span class="glyphicon glyphicon-eye-open"></span> Voir
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!----------->
+                    
+                    <!-- OTHERS -->
+                    <div class="btn-group-vertical btn-block">
+                        {% for others in repository.other_list %}
+                            <div class=row>
+                                <div class="col-sm-10" style="padding-right: 0">
+                                    <button type="submit" class="btn btn-primary btn-block" style="text-align: left">
+                                        <b>{{ others }}</b>
+                                    </button>
+                                </div>
+                                <div class="col-sm-2" style="padding-left: 0">
+                                    <form style="margin-bottom: 0" action="/gitload/view_file/" method="POST" target="_blank">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-default btn-block" name="file_path" value="/{{ path }}{{ others }}">
+                                            <span class="glyphicon glyphicon-eye-open"></span> Voir
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!------------>
+                </div>
+                
+                <div class="panel-footer">Version: {{ repository.version }}</div>
+            </form>
         </div>
-    </section>
-{% endblock %}
-
+        
+    </div>
+    <div class=col-md-2></div>
+</div>
