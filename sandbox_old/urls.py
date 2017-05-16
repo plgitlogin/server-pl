@@ -11,7 +11,6 @@ from sandbox import views
 
 
 urlpatterns = [
-    url(r'^$', views.action),
-    url(r'^$', views.execute),
-
+    url(r'^(?P<pltp_name>\w+)/(?P<pl_name>\w+)/pl/$', views.execute),
+    
 ]
