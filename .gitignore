@@ -1,10 +1,11 @@
 *pyc
 __pycache__/
-server-pl/tmp/*
-server-pl/staticfiles/*
+serverpl/tmp/*
+serverpl/staticfiles/*
 staticfiles/*
 sandbox/env/*
 db.sql*
 *.json
 *.log
 migrations/*
+

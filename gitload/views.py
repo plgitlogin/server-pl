@@ -6,7 +6,7 @@ from os.path import basename, isdir, splitext
 from django.shortcuts import render, redirect
 
 from gitload.repository import Repository
-from gitload.settings import DEFAULT_REPO
+from gitload.models import Loaded_Pltp
 
 from serverpl.settings import DIRREPO
 
@@ -62,7 +62,9 @@ def browse(request):
         pltp_path = request.POST.get('exported', "")
         if (pltp_path != ""):
             confirmation = repository.load_pltp(pltp_path)
-            if (confirmation == ""):
+            if (confirmation != ""):
+                confirmation = "http://"+request.get_host()+confirmation
+            else:
                 error = "Erreur lors du chargement de " + pltp_path
         
         if (request.POST.get('refresh', False)):
@@ -117,3 +119,11 @@ def view_file(request):
             })
     
     return redirect(browse)
+
+def loaded_pltp(request):
+    """ View for [...]/gitload/loaded_pltp -- template: loaded_pltp.html"""
+    pltp = Loaded_Pltp.objects.all();
+    
+    return render(request, 'gitload/loaded_pltp.html', {
+        'pltp': pltp,
+    })

@@ -17,9 +17,9 @@
                 <div class="panel-heading">
                     <div class="row">
                         <form class="form-inline" style="margin-bottom: 0" action="" method="POST">
+                            {% csrf_token %}
                             <div class="col-sm-12">
                                 {% for part in breadcrumb %}
-                                    {% csrf_token %}
                                     <button type="submit" class="btn btn-info" name="git_path" value="{{ breadcrumb_value|index:forloop.counter0 }}">
                                         <b>{{ part }}/</b>
                                     </button>
@@ -30,6 +30,9 @@
                                     </button>
                                     <a href="/gitload/" class="btn btn-default">
                                         <span class="glyphicon glyphicon-arrow-left"></span> Changer de Dépot
+                                    </a>
+                                    <a href="/gitload/loaded_pltp" class="btn btn-default" target="_blank">
+                                        <span class="glyphicon glyphicon-list"></span> PLTPs Chargés
                                     </a>
                                 </div>
                             </div>
@@ -93,7 +96,7 @@
                         {% for others in repository.other_list %}
                             <div class=row>
                                 <div class="col-sm-10" style="padding-right: 0">
-                                    <button type="submit" class="btn btn-primary btn-block" style="text-align: left">
+                                    <button class="btn btn-primary btn-block" style="text-align: left; pointer-events: none;">
                                         <b>{{ others }}</b>
                                     </button>
                                 </div>
