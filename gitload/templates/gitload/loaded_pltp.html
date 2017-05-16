@@ -1,0 +1,40 @@
+<!-- Load the tag library -->
+{% load bootstrap3 %}
+{% load static %}
+{% load index %}
+
+<!-- Load CSS and JavaScript -->
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+<div class="row">
+    <div class=col-md-2></div>
+    <div class=col-md-8>
+        
+    <div class="container">
+        <h2>PLTP(s) Chargé(s):</h2>    
+        {% if pltp %}       
+        <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tp in pltp %}
+                        <td>{{ tp.name }}</td>
+                        <td>{{ tp.url }}</td>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-danger">
+                Aucun PLTP actuellement chargé.
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class=col-md-2></div>
+</div>

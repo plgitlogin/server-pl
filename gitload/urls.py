@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^browse/$', views.browse),
     url(r'^view_file/$', views.view_file),
+    url(r'^loaded_pltp/$', views.loaded_pltp),
 ]

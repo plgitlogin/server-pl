@@ -9,7 +9,8 @@ from os.path import basename, isfile, isdir, splitext
 from gitload.models import Loaded_Pltp, Loaded_Pl
 from gitload.plrequest import SanboxSession
 from gitload.question import Question, ErrorPL
-from gitload.settings import SANDBOX_URL
+
+from serverpl.settings import SANDBOX_URL
 
 from django.conf import settings
 from django.core.files.storage import Storage

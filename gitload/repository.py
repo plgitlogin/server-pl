@@ -10,7 +10,6 @@ from serverpl.settings import DIRREPO
 from os.path import basename, isfile, isdir, splitext, dirname, realpath
 
 from gitload.base import PLTP_Loader
-from gitload.settings import DEFAULT_REPO
 
 
 logger = logging.getLogger(__name__)
