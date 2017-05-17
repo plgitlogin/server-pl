@@ -126,4 +126,5 @@ def loaded_pltp(request):
     
     return render(request, 'gitload/loaded_pltp.html', {
         'pltp': pltp,
+        'domain': "http://"+request.get_host(),
     })

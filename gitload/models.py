@@ -19,3 +19,7 @@ class Loaded_Pl(models.Model):
     name = models.CharField(max_length=100, null = False)
     sha1 = models.CharField(max_length=160, null = False)
     pltp = models.ManyToManyField(Loaded_Pltp)
+
+class Repo(models.Model):
+    name = models.CharField(max_length=50, null = False)
+    url = models.CharField(max_length=200, null = False)
