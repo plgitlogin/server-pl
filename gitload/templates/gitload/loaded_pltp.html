@@ -24,9 +24,12 @@
                 </thead>
                 <tbody>
                     {% for tp in pltp %}
+<tr>
                         <td>{{ tp.name }}</td>
                         <td>{{ tp.url }}</td>
+</tr>
                     {% endfor %}
+
                 </tbody>
             </table>
         {% else %}
