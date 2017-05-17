@@ -26,7 +26,7 @@ SECRET_KEY = '%yh%rw%0fztx-8td-o+$!b6oq7^uu5r)fcwz)$vfob4(_smuu2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['murmuring-caverns-90072.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['murmuring-caverns-90072.herokuapp.com', '127.0.0.1', 'pl-sandbox-test.u-pem.fr']
 
 
 # Application definition
