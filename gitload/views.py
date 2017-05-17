@@ -4,9 +4,10 @@ import os, re, shutil, git
 from os.path import basename, isdir, splitext
 
 from django.shortcuts import render, redirect
+from django.db import IntegrityError
 
-from gitload.repository import Repository
-from gitload.models import Loaded_Pltp
+from gitload.browser import Browser
+from gitload.models import Loaded_Pltp, Repository
 
 from serverpl.settings import DIRREPO
 
@@ -14,67 +15,77 @@ from serverpl.settings import DIRREPO
 
 def index(request):
     """ View for /gitload/ -- template: index.html """
-    repo = list()
-    for (path, subdirs, files) in os.walk(DIRREPO):    
-        for filename in subdirs:
-            repo.append(filename)
-        break
+    repo_list = Repository.objects.all()
     
     error = ""
+    error_url = False
+    error_name = False
+    warning_repo = Repository.missing_repository_in_bd()
     
     if (request.method == 'POST'):
         repo_url = request.POST.get('repo_url', "")
         repo_name = request.POST.get('repo_name', "")
-        
-        if (repo_name != ""):
-            repository = Repository(repo_name)
             
-        if (repo_url != ""):
-            repository = Repository(splitext(basename(repo_url))[0], url=repo_url)
-            if (not repository.get_repo()):
-                shutil.rmtree(repository.root)
-                error = "Dépot '" + repository.url + "' introuvable. Merci de vérifier l'adresse ou votre connexion internet."
+        if (repo_url != ""): #If new repository
+            try:
+                repo, created = Repository.objects.get_or_create(name=repo_name, url=repo_url)
+                browser = Browser(repo)
+                if (not browser.get_repo()):
+                    shutil.rmtree(browser.root)
+                    error_url = True
+                    error = "Dépot '" + browser.url + "' introuvable. Merci de vérifier l'adresse ou votre connexion internet."
+                    repo.delete()
+            except IntegrityError:
+                error_name = True
+                error = "Le nom "+repo_name+" est déjà utilisé, merci d'en choisir un autre."
+                
+        elif (repo_name != ""): #If default
+            repo = Repository.objects.get(name=repo_name)
+            browser = Browser(repo)
         
-        if ((repo_name != "" or repo_url != "") and error == ""):
-            request.session["repository"] = repository.__dict__
+        if (repo_name != "" and error == ""): #If None or error
+            request.session["browser"] = browser.__dict__
             return redirect(browse)
     
     return render(request, "gitload/index.html", {
-        "default_repo": repo,
+        "default": repo_list,
         "error": error,
+        "error_name": error_name,
+        "error_url": error_url,
+        "warning_repo": warning_repo,
     })
 
 
 def browse(request):
     """ View for [...]/gitload/browse -- template: browse.html """
-    if (not "repository" in request.session):
+    if (not "browser" in request.session):
         return redirect(index)
     
-    repository = Repository(None, dic=request.session["repository"])
+    browser = Browser(None, dic=request.session["browser"])
     confirmation = ""
     error = ""
     
     if (request.method == 'POST'):
         git_path = request.POST.get('git_path', "")
         if (git_path != ""):
-            repository.cd(git_path)
+            browser.cd(git_path)
         
         pltp_path = request.POST.get('exported', "")
         if (pltp_path != ""):
-            confirmation = repository.load_pltp(pltp_path)
+            confirmation = browser.load_pltp(pltp_path)
             if (confirmation != ""):
                 confirmation = "http://"+request.get_host()+confirmation
             else:
                 error = "Erreur lors du chargement de " + pltp_path
         
         if (request.POST.get('refresh', False)):
-            repository.refresh_repo()
+            browser.refresh_repo()
     
-    repository.parse_content()
+    browser.parse_content()
     
     ####Creating breadcrumb####
-    path = repository.current_path[repository.current_path.find(repository.name):]
-    rel_path = path[len(repository.name)+1:]
+    path = browser.current_path[browser.current_path.find(browser.name):]
+    rel_path = path[len(browser.name)+1:]
     if (path[-1] != '/'):
         path += '/'
     breadcrumb = path.split('/')[:-1];
@@ -92,7 +103,7 @@ def browse(request):
     return render(request, 'gitload/browse.html', {
         'path': path,
         'rel_path': rel_path,
-        'repository': repository,
+        'browser': browser,
         'breadcrumb': breadcrumb,
         'breadcrumb_value': breadcrumb_value,
         'error': error,
