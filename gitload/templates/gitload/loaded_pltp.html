@@ -24,9 +24,12 @@
                 </thead>
                 <tbody>
                     {% for tp in pltp %}
-                        <td>{{ tp.name }}</td>
-                        <td>{{ domain }}{{ tp.url }}</td>
+                        <tr>
+                            <td>{{ tp.name }}</td>
+                            <td>{{ domain }}{{ tp.url }}</td>
+                        </tr>
                     {% endfor %}
+
                 </tbody>
             </table>
         {% else %}
