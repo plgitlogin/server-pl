@@ -30,7 +30,7 @@ def pl_view(request, pltp_name, pl_name):
         custom_code = True
         code = query.first().student_code
     
-    dic = {
+    return render(request, 'PlayExo/pl.html', {
         "info": info,
         "custom_code": custom_code,
         "code": code,
@@ -38,15 +38,13 @@ def pl_view(request, pltp_name, pl_name):
         "pltp_name": pltp_name,
         "pl_name": pl_name,
         "username": request.user.get_full_name(),
-    }
-    
-    return render(request, 'PlayExo/pl.html', dic)
+    })
 
 def pltp_view(request, pltp_name):
     current_tp = get_object_or_404(PLTP, name=pltp_name)
     pl_list = current_tp.pl_set.all()
     
-    info = current_tp.json
+    info = json.loads(current_tp.json)
     
     return render(request, 'PlayExo/pltp.html', {
         "info": info,

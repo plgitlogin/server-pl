@@ -55,7 +55,7 @@ class PL_Loader():
         try:
             pl = PL.objects.get(sha1=self.sha1)
         except PL.DoesNotExist:
-            pl = PL(name=self.name, sha1=self.sha1, json=json.dumps(self.dic), repository=self.repository, rel_path=self.rel_path)
+            pl = PL(name=self.name, sha1=self.sha1, json=self.dic, repository=self.repository, rel_path=self.rel_path)
             pl.save()
         pl.pltp.add(pltp)
 
@@ -121,10 +121,11 @@ class PLTP_Loader():
     def _add_to_db(self):
         """ Try to add the PLTP to the database, return True if the PLTP was created, 
         False if one with the same sha1 already exists. """
+        
         try:
             PLTP.objects.get(sha1=self.sha1)
         except PLTP.DoesNotExist:
-            pltp = PLTP(name=self.name, url=self.url, sha1=self.sha1, json=json.dumps(self.dic), repository=self.repository, rel_path=self.rel_path)
+            pltp = PLTP(name=self.name, url=self.url, sha1=self.sha1, json=self.dic, repository=self.repository, rel_path=self.rel_path)
             pltp.save()
             return True
         return False
