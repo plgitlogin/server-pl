@@ -19,16 +19,15 @@
                 <thead>
                     <tr>
                         <th>Nom</th>
-                        <th>URL</th>
+                        <th>URL pour moodle</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for tp in pltp %}
 <tr>
                         <td>{{ tp.name }}</td>
-                        <td> <a href="http://{{ domain }}/{{ tp.url }}">{{ tp.url }} </a></td>
+                        <td> <a href="{{ domain }}{{ tp.url }}/">{{ domain }}{{ tp.url }}/</a></td>
 </tr>
-                            <td>{{ domain }}{{ tp.url }}</td>
                         </tr>
                     {% endfor %}
 
