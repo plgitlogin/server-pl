@@ -20,6 +20,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^gitload/', include('gitload.urls')),
     url(r'^PlayExo/', include('PlayExo.urls')),
-    url(r'sandbox/',include('sandbox.urls')),
+    url(r'^sandbox/',include('sandbox.urls')),
     url(r'^admin/', admin.site.urls),
 ]
