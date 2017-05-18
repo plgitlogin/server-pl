@@ -1,16 +1,16 @@
 from django.contrib import admin
 
-from gitload.models import Loaded_Pltp, Loaded_Pl, Repository
+from gitload.models import PLTP, PL, Repository
 
 
-@admin.register(Loaded_Pltp)
+@admin.register(PLTP)
 class PltpAdmin(admin.ModelAdmin):
     list_display=('name', 'url', 'json', 'sha1')
 
-@admin.register(Loaded_Pl)
+@admin.register(PL)
 class PlAdmin(admin.ModelAdmin):
     list_display=('name', 'sha1', 'json')
     
 @admin.register(Repository)
 class RepoAdmin(admin.ModelAdmin):
-    list_display=('name', 'url')
+    list_display=('name', 'url', 'version')

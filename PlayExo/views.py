@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 from serverpl.settings import MEDIA_ROOT
 
-from gitload.models import Loaded_Pltp, Loaded_Pl
+from gitload.models import PLTP
 
 import json, logging
 from PlayExo.models import *

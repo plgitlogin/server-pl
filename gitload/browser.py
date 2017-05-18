@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 #
@@ -9,7 +9,7 @@ from serverpl.settings import DIRREPO
 
 from os.path import basename, isfile, isdir, splitext, dirname, realpath
 
-from gitload.base import PLTP_Loader
+from gitload.loader import PLTP_Loader
 from gitload.models import Repository
 
 
@@ -60,6 +60,9 @@ class Browser():
         
         origin.pull(origin.refs[0].remote_head)
         self.version = repo.heads.master.commit.name_rev[:40]
+        repo_object = Repository.objects.get(name=self.name)
+        repo_object.version = self.version
+        repo_object.save()
         
         return True
     
@@ -99,10 +102,9 @@ class Browser():
                     self.dir_list.append(filename)
             break;
     
-    def load_pltp(self, rel_path):
+    def load_pltp(self, rel_path, repository):
         """ Create a PLTP_Loader with the rel_path to the local repo of a pltp """
-        
-        loader = PLTP_Loader(self.root, rel_path, self.version)
+        loader = PLTP_Loader(rel_path, repository)
         return loader.load()
         
     def cd(self, rel_path = "/"):

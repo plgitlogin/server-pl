@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # coding: utf-8
 
 import os, re, shutil, git
@@ -7,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.db import IntegrityError
 
 from gitload.browser import Browser
-from gitload.models import Loaded_Pltp, Repository
+from gitload.models import PLTP, Repository
 
 from serverpl.settings import DIRREPO
 
@@ -72,11 +73,13 @@ def browse(request):
         
         pltp_path = request.POST.get('exported', "")
         if (pltp_path != ""):
-            confirmation = browser.load_pltp(pltp_path)
-            if (confirmation != ""):
-                confirmation = "http://"+request.get_host()+confirmation
+            repo_object = Repository.objects.get(name=browser.name)
+            loaded, msg = browser.load_pltp(pltp_path, repo_object)
+            if (not loaded):
+                error = msg
             else:
-                error = "Erreur lors du chargement de " + pltp_path
+                lti = PLTP.objects.get(rel_path=pltp_path).url
+                confirmation = "http://"+request.get_host()+lti
         
         if (request.POST.get('refresh', False)):
             browser.refresh_repo()
@@ -133,7 +136,7 @@ def view_file(request):
 
 def loaded_pltp(request):
     """ View for [...]/gitload/loaded_pltp -- template: loaded_pltp.html"""
-    pltp = Loaded_Pltp.objects.all();
+    pltp = PLTP.objects.all();
     
     return render(request, 'gitload/loaded_pltp.html', {
         'pltp': pltp,
