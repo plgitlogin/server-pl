@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from serverpl.settings import MEDIA_ROOT
 
-from gitload.models import PLTP
+from gitload.models import PLTP,PL
 
 import json, logging
 from PlayExo.models import *
