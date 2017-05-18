@@ -10,20 +10,20 @@ from serverpl.settings import DIRREPO
 from os.path import basename, isfile, isdir, splitext, dirname, realpath
 
 from gitload.base import PLTP_Loader
+from gitload.models import Repository
 
 
 logger = logging.getLogger(__name__)
 
 
-class Repository():
+class Browser():
     
-    def __init__(self, name, url = None, dic = None):
+    def __init__(self, repository, dic = None):
         """ Members will be initialized with a dictionnary if provided """
         
         if (not dic):
-            self.url = url                          #URL of the remote repo
-            self.name = name                        #Name of the repo ('plbank' for isntance) 
-            self.version = ''                       #First seven number of the last commit
+            self.name = repository.name             #Name of the repository
+            self.url = repository.url               #URL of the repository
             
             self.root = DIRREPO + '/' + self.name   #Absolute path to the local copy of the repository
             self.current_path = self.root           #Absolute path to the actual directory of the repository in the browser
@@ -31,11 +31,12 @@ class Repository():
             self.dir_list = list()                  #List of every directory in self.current_path
             self.other_list = list()                #List of every other files in self.current_path
             
-            if (not url):   #Get git URL if chose a local repository
+            if (not repository.is_repo_downloaded()):
+                self.get_repo()
+            else:
                 repo = git.Repo(self.root)
-                self.url = repo.remotes.origin.url
                 self.version = repo.heads.master.commit.name_rev[:40]
-        
+            
         else:
             for k, v in dic.items():
                 setattr(self, k, v)
@@ -85,6 +86,7 @@ class Repository():
     
     def parse_content(self):
         """ Fill 'pltp', 'dir' and 'other' lists with the corresponding file. """
+        print("CURRENT_PATH: " + self.current_path)
         for (path, subdirs, files) in os.walk(self.current_path):
             for filename in files:
                 if (os.path.splitext(filename)[1] == '.pltp'):

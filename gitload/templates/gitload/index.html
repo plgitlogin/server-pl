@@ -15,9 +15,15 @@
             <div class="panel-heading">Choisissez un Dépot</div>
             <div class="panel-body">
                 
+                <!--WARNING/ERROR MESSAGE-->
+                {% if warning_repo %}
+                    <div class="alert alert-warning">
+                        <span class="glyphicon glyphicon-warning-sign"></span> <b>Attention:</b> Certain dépot existant dans repo/ ne possèdent pas d'entrée correspondante dans la base de données. Merci de contacter un administrateur.
+                    </div>
+                {% endif %}
                 {% if error != "" %}
                     <div class="alert alert-danger">
-                        {{ error }}
+                        <span class="glyphicon glyphicon-fire"></span>&emsp;{{ error }}
                     </div>
                 {% endif %}
                         
@@ -27,9 +33,9 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading"><span class="glyphicon glyphicon-home"></span> Dépot par Défaut</div>
                         <div class="panel-body">
-                            {% for repo in default_repo %}
-                                <button type="submit" class="btn btn-primary btn-block" name="repo_name" value="{{ repo }}" style="text-align: left"/>
-                                        <span class="glyphicon glyphicon-arrow-right"></span><b>&emsp;{{ repo }}
+                            {% for repo in default %}
+                                <button type="submit" class="btn btn-primary btn-block" name="repo_name" value="{{ repo.name }}" style="text-align: left"/>
+                                        <span class="glyphicon glyphicon-arrow-right"></span><b>&emsp;{{ repo.name }} - {{ repo.url }}
                                 </button>
                             {% endfor %}
                         </div>
@@ -43,18 +49,48 @@
                         <div class="panel-heading"><span class="glyphicon glyphicon-download-alt"></span> Dépot par Adresse</div>
                         <div class="panel-body">
                             
-                            {% if error == "" %}
-                                <div class="input-group">
-                                    <span class="input-group-addon">URL:</span>
-                                    <input id="msg" type="text" class="form-control" name="repo_url" placeholder="https://githost.com/repository.git">
+                            <div class=row>
+                                <div class="col-sm-2">
+                                    <center>
+                                        <button class="btn btn-info" type="submit">
+                                            <span class="glyphicon glyphicon-download"></span>&emsp;Ajouter&emsp;
+                                        </button>
+                                    </center>
                                 </div>
-                            {% else %}
+                                <div class="col-sm-3">
+                                    {% if error_name %}
+                                        <div class="input-group has-error has-feedback">
+                                            <span class="input-group-addon">NAME:</span>
+                                            <input id="msg" type="text" class="form-control" id="inputError2" name="repo_name" placeholder="repository" required>
+                                        </div>
+                                    {% else %}
+                                        <div class="input-group">
+                                            <span class="input-group-addon">NAME:</span>
+                                            <input id="msg" type="text" class="form-control" name="repo_name" placeholder="repository" required>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-7">
+                                    {% if error_url %}
+                                        <div class="input-group has-error has-feedback">
+                                            <span class="input-group-addon">URL:</span>
+                                            <input id="msg" type="text" class="form-control" id="inputError2" name="repo_url" placeholder="https://githost.com/repository.git" required>
+                                        </div>
+                                    {% else %}
+                                        <div class="input-group">
+                                            <span class="input-group-addon">URL:</span>
+                                            <input id="msg" type="text" class="form-control" name="repo_url" placeholder="https://githost.com/repository.git" required>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+<!--
                                 <div class="input-group has-error has-feedback">
                                     <span class="input-group-addon">URL:</span>
                                     <input type="text" class="form-control" id="inputError2" name="repo_url" placeholder="https://githost.com/repository.git">
                                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 </div>
-                            {%endif %}
+-->
                         </div>
                     </div>
                 </form>

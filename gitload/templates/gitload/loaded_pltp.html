@@ -26,8 +26,10 @@
                     {% for tp in pltp %}
 <tr>
                         <td>{{ tp.name }}</td>
-                        <td> <a href="{{ tp.url }}">{{ tp.url }} </a></td>
+                        <td> <a href="http://{{ domain }}/{{ tp.url }}">{{ tp.url }} </a></td>
 </tr>
+                            <td>{{ domain }}{{ tp.url }}</td>
+                        </tr>
                     {% endfor %}
 
                 </tbody>

@@ -66,7 +66,7 @@ class SanboxSession:
         self.question.checkgrader()
 
     def call(self):
-        self.createEnvZipRun()
+        mn = self.createEnvZipRun()
         self.checkgrader()
         mn = hashlib.sha1()
         zipvalue=open(self.zipname, 'rb').read()
