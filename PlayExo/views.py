@@ -17,13 +17,13 @@ logger = logging.getLogger(__name__)
 
 
 
-def pl_view(request, pltp_name, pl_name):
-    current_tp = get_object_or_404(PLTP, name=pltp_name)
-    current_pl = get_object_or_404(PL, name=pl_name)
+def pl_view(request, pltp_sha1, pl_sha1):
+    current_tp = get_object_or_404(PLTP, sha1=pltp_sha1)
+    current_pl = get_object_or_404(PL, sha1=pl_sha1)
     pl_list = current_tp.pl_set.all()
     
     info = json.loads(current_pl.json)
-    query = studentCode.objects.filter(student = request.user.username, pl = pl_name)
+    query = studentCode.objects.filter(student = request.user.username, pl = pl_sha1)
     code = ""
     custom_code = False
     if query.first():
@@ -35,13 +35,13 @@ def pl_view(request, pltp_name, pl_name):
         "custom_code": custom_code,
         "code": code,
         "pl_list": pl_list,
-        "pltp_name": pltp_name,
-        "pl_name": pl_name,
+        "pltp": current_tp,
+        "pl_name": current_pl.name,
         "username": request.user.get_full_name(),
     })
 
-def pltp_view(request, pltp_name):
-    current_tp = get_object_or_404(PLTP, name=pltp_name)
+def pltp_view(request, pltp_sha1):
+    current_tp = get_object_or_404(PLTP, sha1=pltp_sha1)
     pl_list = current_tp.pl_set.all()
     
     info = json.loads(current_tp.json)
@@ -49,7 +49,7 @@ def pltp_view(request, pltp_name):
     return render(request, 'PlayExo/pltp.html', {
         "info": info,
         "pl_list": pl_list,
-        "pltp_name": pltp_name,
+        "pltp": current_tp,
         "username": request.user.get_full_name(),
     })
 
@@ -60,5 +60,5 @@ def lti_receiver(request, sha1):
         
     pltp = get_object_or_404(PLTP, sha1=sha1)
     
-    return redirect(pltp_view, pltp.name)
+    return redirect(pltp_view, pltp.sha1)
         

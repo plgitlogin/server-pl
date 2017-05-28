@@ -9,7 +9,7 @@
 
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <div class="col-md-4 text-left">{{ pltp_name }}: {{ pl_name }}</div>
+        <div class="col-md-4 text-left">{{ pltp.name }}: {{ pl_name }}</div>
         <div class="col-md-4 text-center"><h3>{% if 'title' in info %}  {{ info.title|markdown }} {% endif %}</h3></div>
         <div class="col-md-4 text-right">{% if 'author' in info %} {{ info.author }} {% endif %}</div>
         <br>
@@ -24,7 +24,7 @@
         <!-- Do not tabulate this div as the tabulation will appear in the editor -->
         <div id="editor">{% if custom_code %}{{ code }}{% else %}{{ info.code }}{% endif %}</div>
         
-        <form action="/sandbox/{{pltp_name}}/{{pl_name}}/pl/" method="post">
+        <form action="/sandbox/{{pltp.name}}/{{pl_name}}/pl/" method="post">
             {% csrf_token %}
             <input type="hidden" name="code" style="display: none;">
             
