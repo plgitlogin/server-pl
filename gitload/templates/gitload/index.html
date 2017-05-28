@@ -16,11 +16,6 @@
             <div class="panel-body">
                 
                 <!--WARNING/ERROR MESSAGE-->
-                {% if warning_repo %}
-                    <div class="alert alert-warning">
-                        <span class="glyphicon glyphicon-warning-sign"></span> <b>Attention:</b> Certain dépot existant dans repo/ ne possèdent pas d'entrée correspondante dans la base de données. Merci de contacter un administrateur.
-                    </div>
-                {% endif %}
                 {% if error != "" %}
                     <div class="alert alert-danger">
                         <span class="glyphicon glyphicon-fire"></span>&emsp;{{ error }}

@@ -9,7 +9,7 @@ class PltpAdmin(admin.ModelAdmin):
 
 @admin.register(PL)
 class PlAdmin(admin.ModelAdmin):
-    list_display=('name', 'sha1', 'json')
+    list_display=('name', 'sha1')
     
 @admin.register(Repository)
 class RepoAdmin(admin.ModelAdmin):
