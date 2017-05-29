@@ -134,6 +134,36 @@ def view_file(request):
     
     return redirect(browse)
 
+def edit_file(request):
+    """ View for [...]/gitload/edit_file -- template: edit_file.html"""
+    if (request.method == 'POST'):
+        file_path = request.POST.get('file_path', "")
+        
+        if (file_path != ""):
+            with open(DIRREPO+file_path, "r") as f:
+                content  = f.read()
+            
+            request.current_app = 'gitload' # Interet ?
+            return render(request,  'gitload/edit_file.html', {
+                'filecontent': content,
+                'filename': basename(file_path),
+            })
+    
+    return redirect(browse)
+
+def save_file(request):
+    """ View for [...]/gitload/edit_file -- template: edit_file.html"""
+    if (request.method == 'POST'):
+        file_path = request.POST.get('file_path', "")
+        
+        print("saving ",file_path)
+    
+    return redirect(browse)
+
+
+
+
+
 def loaded_pltp(request):
     """ View for [...]/gitload/loaded_pltp -- template: loaded_pltp.html"""
     pltp = PLTP.objects.all();

@@ -17,7 +17,11 @@ if not path in sys.path:
     sys.path.append(path)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+statcdir=os.path.join(os.path.dirname(os.path.abspath(__file__)),'static/')
+
+print("currentstatic",statcdir)
 
 application = get_wsgi_application()
 application = DjangoWhiteNoise(application)
+application.add_files(root=statcdir)
 

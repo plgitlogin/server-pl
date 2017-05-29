@@ -12,6 +12,6 @@ from sandbox import views
 
 urlpatterns = [
     url(r'^$', views.action),
-    url(r'^$', views.execute),
+    url(r'^pl/$', views.execute),
 
 ]

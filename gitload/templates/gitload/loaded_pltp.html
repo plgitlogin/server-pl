@@ -18,6 +18,7 @@
         <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
+			<th></th>
                         <th>Nom</th>
                         <th>URL pour moodle</th>
                     </tr>
@@ -25,6 +26,7 @@
                 <tbody>
                     {% for tp in pltp %}
 <tr>
+			<td> Reload </td>
                         <td>{{ tp.name }}</td>
                         <td> <a href="{{ domain }}{{ tp.url }}/">{{ domain }}{{ tp.url }}/</a></td>
 </tr>

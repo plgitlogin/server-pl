@@ -61,6 +61,11 @@ ROOT_URLCONF = 'serverpl.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [
+        ],
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
@@ -71,7 +76,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+        
     },
+
 ]
 
 WSGI_APPLICATION = 'serverpl.wsgi.application'
@@ -206,13 +213,22 @@ USE_TZ = True
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# python plank packtage dir  
+import sys
+PYSRCDIR=os.path.dirname(PROJECT_DIR + "/../pysrc/")
+
+print("PYSRCDIR="+PYSRCDIR)
+if not PYSRCDIR in sys.path:
+	sys.path.append(PYSRCDIR)
+
+
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 

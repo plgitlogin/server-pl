@@ -16,8 +16,24 @@ Including another URLconf
 
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.http import HttpResponse
+from django.shortcuts import render
+from jinja2 import Template
+
+def index(request):
+    print(request.session.keys())
+    request.session['cookie']=True
+    return render(request,Template(open('/tmp/bob.html','r').read()))
+    return HttpResponse("""<html><body><a href="gitload/"> Load a Repo </A>
+<a href="PlayExo/"> Play exos </a>
+</body>
+</html>
+
+""")
 
 urlpatterns = [
+  
+    url(r'^$', index ),
     url(r'^gitload/', include('gitload.urls')),
     url(r'^PlayExo/', include('PlayExo.urls')),
     url(r'^sandbox/',include('sandbox.urls')),

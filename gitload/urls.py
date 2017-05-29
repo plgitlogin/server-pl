@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^browse/$', views.browse),
     url(r'^view_file/$', views.view_file),
     url(r'^loaded_pltp/$', views.loaded_pltp),
-]
+    url(r'^save_file/$', views.save_file),
+    url(r'^edit_file/$', views.edit_file),
+    ]

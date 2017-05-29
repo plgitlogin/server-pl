@@ -1,4 +1,6 @@
-# coding: utf-8
+#!/usr/bin/env python3
+# encoding: utf-8
+# Copyright Dominique Revuz, Quentin Coumes 2017
 
 import os, sys, shutil, git, re, json, time, logging, subprocess, pathlib, hashlib
 
@@ -36,7 +38,9 @@ class PL_Loader():
         Return (True, None) if the PL was correctly loaded, (False, error_message)
         if something wrong happened. """
         try:
-            self.dic = Question(self.rel_path, self.root).dico
+            q= Question(self.rel_path, self.root)
+            self.dic = q.dico
+            self.zipvalue = q.getZipValue()
         except ErrorPL as e:
             return False, "Impossible de charger "+self.rel_path+": "+str(e)
         
@@ -55,7 +59,7 @@ class PL_Loader():
         try:
             pl = PL.objects.get(sha1=self.sha1)
         except PL.DoesNotExist:
-            pl = PL(name=self.name, sha1=self.sha1, json=json.dumps(self.dic), repository=self.repository, rel_path=self.rel_path)
+            pl = PL(name=self.name, sha1=self.sha1, json= self.dic, repository=self.repository, rel_path=self.rel_path)
             pl.save()
         pl.pltp.add(pltp)
 
@@ -124,7 +128,7 @@ class PLTP_Loader():
         try:
             PLTP.objects.get(sha1=self.sha1)
         except PLTP.DoesNotExist:
-            pltp = PLTP(name=self.name, url=self.url, sha1=self.sha1, json=json.dumps(self.dic), repository=self.repository, rel_path=self.rel_path)
+            pltp = PLTP(name=self.name, url=self.url, sha1=self.sha1, json=self.dic, repository=self.repository, rel_path=self.rel_path)
             pltp.save()
             return True
         return False

@@ -44,4 +44,7 @@ class PL(models.Model):
     pltp = models.ManyToManyField(PLTP)
     repository = models.ForeignKey(Repository, on_delete=models.SET_NULL, null=True)
     rel_path = models.CharField(max_length=360, null = False)
+    zipvalue= models.BinaryField(null=True) #  FIXEME DR this is bad should be a link to a real file
 
+    #def callSandbox(self,sandbox,code):
+        
