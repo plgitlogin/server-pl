@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% block head %}{% endblock %}
+  <title>{% block Name %}Simple HTML document{% endblock %} UPEM - PL 2017/2018</title>
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Load the tag library -->
+{% load bootstrap3 %}
+{% load static %}
+
+<!-- Load CSS and JavaScript -->
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+</head>
+<body>
+  {% block institut %}<hr>Pas de block institut<hr>{% endblock %}
+  {% block nav %}
+    <nav class="navbar navbar-inverse">
+        <img src="http://www.u-pem.fr/fileadmin/templates/template_web_040509/common/images/structures/UPEM_LOGO.png"/>
+        <div class="container-fluid">
+            <div class="navbar-header" style="margin-left: 16.3%">
+                <a class="navbar-brand" href="#">Premier Langage</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 15%">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-user"></span>
+                        {% if username %}{{ username }}{% else %}Not-Login{% end %}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><span class="glyphicon glyphicon-envelope"></span>&emsp;{{ user.email }}</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+{% block exo %}{% endblock %}
+</body>
+</html>                                  		
+

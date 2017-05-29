@@ -1,0 +1,40 @@
+
+<html>
+<head>
+        {% block head %}{% endblock %}
+  <title>{% block Name %}Simple HTML document{% endblock %} UPEM - PL 2017/2018</title>
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Load the tag library -->
+{% load bootstrap3 %}
+
+{% load static %}
+
+<!-- Load CSS and JavaScript -->
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% load markdown_deux_tags %}
+<!-- Loading CSS and JS -->
+<link rel="stylesheet" type="text/css" href="{% static 'PlayExo/css/exo_info.css' %}" />
+
+
+
+</head>
+<body>
+{% block topbar %}{% include "PlayExo/top_bar.html" %}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-2">{% block nav %}
+        {% include "PlayExo/nav.html" %}
+        {% endblock %}
+    </div>
+    <div class="col-md-8">
+    {% block exo %}{% include "PlayExo/pl_info.html" %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>
+

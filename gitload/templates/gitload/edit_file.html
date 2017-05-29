@@ -1,0 +1,106 @@
+
+
+<html>
+<head>
+        
+  <title>Simple HTML document UPEM - PL 2017/2018</title>
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Load the tag library -->
+
+
+
+
+<!-- Load CSS and JavaScript -->
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<!-- Loading CSS and JS -->
+<link rel="stylesheet" type="text/css" href="/static/PlayExo/css/exo_info.css" />
+
+
+
+</head>
+<body>
+
+
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<nav class="navbar navbar-inverse">
+
+    <div class="container-fluid">
+        <img src="http://www.u-pem.fr/fileadmin/templates/template_web_040509/common/images/structures/UPEM_LOGO.png" height="44" width="88" /> 
+        <div class="navbar-header" style="margin-left: 16.3%">
+            <a class="navbar-brand" href="#">Premier Langage</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right" style="margin-right: 15%">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-user"></span> 
+                    Not-Login
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><span class="glyphicon glyphicon-envelope"></span>&emsp;</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+    <div class="col-md-8">
+    
+
+
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+
+
+
+<!-- Loading CSS and JS -->
+<link rel="stylesheet" type="text/css" href="/static/PlayExo/css/exo_info.css" />
+
+<div class="panel panel-primary">
+
+    <div class="panel-body">
+        <h1>Edition de {{ filename }}</h1>
+
+<p>Corrigez puis sauvegardez. </p>
+        <hr>
+        
+        <!-- Do not tabulate this div as the tabulation will appear in the editor -->
+        <div id="editor">{{ filecontent }}
+</div>
+        
+        <form action="/gitload/save_file/" method="post">
+            <input type='hidden' name='csrfmiddlewaretoken' value='FwicQ0D6hbvR8weaLycG4qkH4HDcqFymQxn3RIw23Yhkn9Hu44zkjFcrMKJalXlO' />
+            <input type="hidden" name="code" style="display: none;">
+            <input type="submit" name="save" >save</input>
+        </form>
+    </div>
+</div>
+
+<script src="/static/AceCodeEditor/ace-builds/ace-builds-master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit('editor');
+        editor.session.setMode("ace/mode/python");
+        editor.setTheme("ace/theme/monokai");
+
+    var input = $('input[name="code"]');
+        editor.getSession().on("change", function () {
+        input.val(editor.getSession().getValue());
+    });
+</script> 
+
+
+
+    </div>
+</div>
+
+</body>
+</html>
