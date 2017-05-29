@@ -6,14 +6,13 @@
 <div id="btn-group-toggle" class="btn-group">
     
     <!-- PLTP -->
-    <a href="/PlayExo/pltp/{{ pltp_name }}" type="button" class="btn btn-default btn-lg">{{ pltp_name }}</a>
-
+    <a href="/PlayExo/pltp/{{ pltp.sha1 }}" type="button" class="btn btn-default btn-lg">{{ pltp.name }}</a>
     <!-- Every PL -->
     {% for pl in pl_list %}
-        {% if pl_name == pl.name %}
-            <a href="/PlayExo/pl/{{ pltp_name }}/{{ pl.name }}" type="button" class="btn btn-info btn-lg active">{{ pl.name }}</a>
+        {% if 'pl_name' in info and pl_name == pl.name %}
+            <a href="/PlayExo/pl/{{ pltp.sha1 }}/{{ pl.sha1 }}" type="button" class="btn btn-info btn-lg active">{{ pl.name }}</a>
         {% else %}
-            <a href="/PlayExo/pl/{{ pltp_name }}/{{ pl.name }}" type="button" class="btn btn-info btn-lg">{{ pl.name }}</a>
+            <a href="/PlayExo/pl/{{ pltp.sha1 }}/{{ pl.sha1 }}" type="button" class="btn btn-info btn-lg">{{ pl.name }}</a>
         {% endif %}
     {% endfor %}
     

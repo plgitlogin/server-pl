@@ -5,8 +5,8 @@
 
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <div class="col-md-4 text-left">{{ pltp_name }}</div>
-        <div class="col-md-4 text-center"><h3>{% if 'title' in info %}  {{ info.title|markdown }} {% endif %}</h3></div>
+        <div class="col-md-4 text-left">{{ pltp.name }}</div>
+        <div class="col-md-4 text-center"><h3>{% if 'title' in info %}  {{ info.title }} {% endif %}</h3></div>
         <div class="col-md-4 text-right">{% if 'author' in info %} {{ info.author }} {% endif %}</div>
         <br>
         <br>
@@ -14,13 +14,8 @@
     </div>
     
     <div class="panel-body">
-        <!-- {{ info.introduction|markdown }} -->
-        {% for key, value in info.items %}
-            {% if "introduction" in key %}
-                {% for line in value %}
-                    {{line|markdown}}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
+        {% if "introduction" in info %}
+                {{ info.introduction|markdown }}
+        {% endif %}
     </div>
 </div>

@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    
+  <title>Simple HTML document UPEM - PL 2017/2018</title>
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Load the tag library -->
+
+
+
+
+<!-- Load CSS and JavaScript -->
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<!-- Loading CSS and JS -->
+<link rel="stylesheet" type="text/css" href="/static/PlayExo/css/exo_info.css" />
+
+
+</head>
+<body>
+
+
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<nav class="navbar navbar-inverse">
+            <img src="http://www.u-pem.fr/fileadmin/templates/template_web_040509/common/images/structures/UPEM_LOGO.png" width="44" height="44"/>
+    <div class="container-fluid">
+        <div class="navbar-header" style="margin-left: 16.3%">
+            <a class="navbar-brand" href="#">Premier Langage</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right" style="margin-right: 15%">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-user"></span> 
+                    Not-Login
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><span class="glyphicon glyphicon-envelope"></span>&emsp;</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-2">
+    
+
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+
+
+<div id="btn-group-toggle" class="btn-group">
+    
+    <!-- PLTP -->
+    <a href="/PlayExo/pltp/plgrader" type="button" class="btn btn-default btn-lg">plgrader</a>
+
+    <!-- Every PL -->
+    
+        
+            <a href="/PlayExo/pl/plgrader/error" type="button" class="btn btn-info btn-lg active">error</a>
+        
+    
+        
+            <a href="/PlayExo/pl/plgrader/function001" type="button" class="btn btn-info btn-lg">function001</a>
+        
+    
+        
+            <a href="/PlayExo/pl/plgrader/operator001" type="button" class="btn btn-info btn-lg">operator001</a>
+        
+    
+        
+            <a href="/PlayExo/pl/plgrader/identificateurs" type="button" class="btn btn-info btn-lg">identificateurs</a>
+        
+    
+    
+    
+    <script>
+        var wideScreen = 990;
+        var toggleBtnGroup = function() {
+            var windowWidth = $(window).width();
+              
+            if(windowWidth > wideScreen) {
+                $('#btn-group-toggle').addClass('btn-group-vertical').removeClass('btn-group');
+            } else {
+                $('#btn-group-toggle').addClass('btn-group').removeClass('btn-group-vertical');
+            }
+        }
+        toggleBtnGroup(); // trigger on load
+        window.addEventListener('resize',toggleBtnGroup); // change on resize
+    </script>
+</div>
+
+    
+    </div><div class="col-md-1"></div>
+    <div class="col-md-6">
+    
+
+
+<!-- Need bootstrap3, bootstrap_css and bootstrap_javascript to be loaded -->
+
+
+
+<!-- Loading CSS and JS -->
+<link rel="stylesheet" type="text/css" href="/static/PlayExo/css/exo_info.css" />
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class="col-md-4 text-left">plgrader: error</div>
+        <div class="col-md-4 text-center"><h3>  erreurdeocompilation </h3></div>
+        <div class="col-md-4 text-right"></div>
+        <br>
+        <br>
+        <br>
+    </div>
+    
+    <div class="panel-body">
+        <h1>Erreurs de Compilation</h1>
+
+<p>Corrigez l'erreur qui fait que le code suivant ne compile pas. </p>
+
+        <hr>
+        
+        <!-- Do not tabulate this div as the tabulation will appear in the editor -->
+        <div id="editor">
+x=int(input(&quot;Nombre d&#39;équipes de Football à embarquer sur le bateau :&quot;)
+tailleequipe=11
+print(&quot;En ne comptant que les joueurs il faut &quot;,tailleequipe*x, &quot; places.&quot;)
+
+</div>
+        
+        <form action="/sandbox/plgrader/error/pl/" method="post">
+            <input type='hidden' name='csrfmiddlewaretoken' value='2RbtfABfI2FP3BiZrvOwAyB4KSz9NQx0dSgkgiubuPriieLjK1baPNtOsVF7I8ks' />
+            <input type="hidden" name="code" style="display: none;">
+            
+            
+            
+            <br>
+            <center>
+                <button class="btn btn-primary" type="submit" formaction="/PlayExo/form/plgrader/error/grade/"> Validation</button>
+<button class="btn btn-secondary" type="submit" formaction="/PlayExo/form/plgrader/error/reset/"> Reset</button>
+<button class="btn btn-warning" type="submit" formaction="/PlayExo/form/plgrader/error/undo/"> Précédent</button>
+
+
+            </center>
+        </form>
+    </div>
+</div>
+
+<script src="/static/AceCodeEditor/ace-builds/ace-builds-master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit('editor');
+        editor.session.setMode("ace/mode/python");
+        editor.setTheme("ace/theme/monokai");
+
+    var input = $('input[name="code"]');
+        editor.getSession().on("change", function () {
+        input.val(editor.getSession().getValue());
+    });
+</script> 
+
+
+
+    </div>
+    <div class="col-md-1"></div>
+</div>
+</body>
+</html>                                  		
+

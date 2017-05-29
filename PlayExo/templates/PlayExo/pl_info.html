@@ -25,7 +25,7 @@
         <!-- Do not tabulate this div as the tabulation will appear in the editor -->
         <div id="editor">{% if custom_code %}{{ code }}{% else %}{{ info.code }}{% endif %}</div>
         
-        <form action="/sandbox/{{pltp_name}}/{{pl_name}}/pl/" method="post">
+        <form action="/sandbox/{{pltp.name}}/{{pl_name}}/pl/" method="post">
             {% csrf_token %}
             <input type="hidden" name="code" style="display: none;">
             

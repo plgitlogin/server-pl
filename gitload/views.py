@@ -9,6 +9,7 @@ from django.db import IntegrityError
 
 from gitload.browser import Browser
 from gitload.models import PLTP, Repository
+from gitload.utils import create_breadcrumb
 
 from serverpl.settings import DIRREPO
 
@@ -16,12 +17,12 @@ from serverpl.settings import DIRREPO
 
 def index(request):
     """ View for /gitload/ -- template: index.html """
+    Repository.add_missing_repository_in_bd()
     repo_list = Repository.objects.all()
     
     error = ""
     error_url = False
     error_name = False
-    warning_repo = Repository.missing_repository_in_bd()
     
     if (request.method == 'POST'):
         repo_url = request.POST.get('repo_url', "")
@@ -53,7 +54,6 @@ def index(request):
         "error": error,
         "error_name": error_name,
         "error_url": error_url,
-        "warning_repo": warning_repo,
     })
 
 
@@ -65,43 +65,39 @@ def browse(request):
     browser = Browser(None, dic=request.session["browser"])
     confirmation = ""
     error = ""
+    ask_force = False
+    force = False
+    pltp_path = ""
     
     if (request.method == 'POST'):
-        git_path = request.POST.get('git_path', "")
+        git_path = request.POST.get('git_path', "") #Changing directory
         if (git_path != ""):
             browser.cd(git_path)
         
         pltp_path = request.POST.get('exported', "")
-        if (pltp_path != ""):
+        if (pltp_path != ""): #Loading a PLTP
             repo_object = Repository.objects.get(name=browser.name)
-            loaded, msg = browser.load_pltp(pltp_path, repo_object)
-            if (not loaded):
-                error = msg
+            if (request.POST.get('force', "False") == "True"):
+                force = True
+            sha1, msg = browser.load_pltp(pltp_path, repo_object, force)
+            if (not sha1):
+                if (msg):
+                    error = msg
+                else:
+                    ask_force = True
             else:
-                lti = PLTP.objects.get(rel_path=pltp_path).url
+                lti = PLTP.objects.get(sha1=sha1).url
                 confirmation = "http://"+request.get_host()+lti
         
         if (request.POST.get('refresh', False)):
             browser.refresh_repo()
     
     browser.parse_content()
+    request.session["browser"] = browser.__dict__
     
-    ####Creating breadcrumb####
     path = browser.current_path[browser.current_path.find(browser.name):]
     rel_path = path[len(browser.name)+1:]
-    if (path[-1] != '/'):
-        path += '/'
-    breadcrumb = path.split('/')[:-1];
-    breadcrumb_value = list()
-    for i in range(0, len(breadcrumb)):
-        if (i == 0):
-            breadcrumb_value.append("/")
-        else:
-            breadcrumb_value.append("")
-        for j in range(1, i+1):
-            breadcrumb_value[i] += ('/' + breadcrumb[j])
-            if (breadcrumb_value[i][0] == '/' and len(breadcrumb_value[i]) > 1):
-                breadcrumb_value[i] = breadcrumb_value[i][1:]
+    breadcrumb, breadcrumb_value = create_breadcrumb(path)
     
     return render(request, 'gitload/browse.html', {
         'path': path,
@@ -111,6 +107,8 @@ def browse(request):
         'breadcrumb_value': breadcrumb_value,
         'error': error,
         'confirmation': confirmation,
+        'ask_force': ask_force,
+        'exported': pltp_path,
     })
 
 

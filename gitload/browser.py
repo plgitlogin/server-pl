@@ -30,10 +30,9 @@ class Browser():
             self.pltp_list = list()                 #List of every pltp in self.current_path
             self.dir_list = list()                  #List of every directory in self.current_path
             self.other_list = list()                #List of every other files in self.current_path
+            self.version = "Inconnue: Merci d'actualiser le dépot"
             
-            if (not repository.is_repo_downloaded()):
-                self.get_repo()
-            else:
+            if (repository.is_repo_downloaded()):
                 repo = git.Repo(self.root)
                 self.version = repo.heads.master.commit.name_rev[:40]
             
@@ -45,51 +44,41 @@ class Browser():
         """ Create or replace self.path with a new clone of self.url
             Update self.version """
 
-        if (isdir(self.root)):
-            shutil.rmtree(self.root)
-        os.mkdir(self.root)
-        
         repo = git.Repo.init(self.root)
-        
         origin = repo.create_remote('origin', self.url)
         try:
             origin.fetch()
         except:
             logger.info("Couldn't join "+self.url)
             return False;
-        
         origin.pull(origin.refs[0].remote_head)
         self.version = repo.heads.master.commit.name_rev[:40]
         repo_object = Repository.objects.get(name=self.name)
         repo_object.version = self.version
         repo_object.save()
-        
         return True
-    
     
     def refresh_repo(self):
         """ Refresh the local copy of the repo by checking difference and doing a checkout if found any """
         if (not isdir(self.root) or not isdir(self.root + "/.git")): #Check if the repo is already cloned
             self.get_repo()
             return
-        
         repo = git.Repo.init(self.root)
-        
         origin = repo.remote()
         try:
-            origin.fetch()
+            origin.fetch(None)
         except git.exc.CommandError:
             logger.info("Couldn't join " + self.url + ", stopping refresh")
             return
-            
-        if (repo.index.diff(None)):
-            self.get_repo()
-            self.current_path = self.root
-    
+        origin.pull("master")
+        repo = git.Repo(self.root)
+        self.version = repo.heads.master.commit.name_rev[:40]
     
     def parse_content(self):
         """ Fill 'pltp', 'dir' and 'other' lists with the corresponding file. """
-        print("CURRENT_PATH: " + self.current_path)
+        self.pltp_list = list()
+        self.dir_list = list()
+        self.other_list = list()
         for (path, subdirs, files) in os.walk(self.current_path):
             for filename in files:
                 if (os.path.splitext(filename)[1] == '.pltp'):
@@ -101,11 +90,15 @@ class Browser():
                 if (filename[0] != '.'):
                     self.dir_list.append(filename)
             break;
+            
+        self.pltp_list.sort()
+        self.other_list.sort()
+        self.dir_list.sort()
     
-    def load_pltp(self, rel_path, repository):
+    def load_pltp(self, rel_path, repository, force=False):
         """ Create a PLTP_Loader with the rel_path to the local repo of a pltp """
         loader = PLTP_Loader(rel_path, repository)
-        return loader.load()
+        return loader.load(force)
         
     def cd(self, rel_path = "/"):
         """ Change self.current_path, rel_path is relative to self.root """

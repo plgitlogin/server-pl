@@ -11,7 +11,23 @@
 <!-- Load CSS and JavaScript -->
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+
+
 {% block content %}
+<head>
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% if ask_force %}
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#askForce").modal('show');
+            });
+        </script>
+    {% endif %}
+</head>
+
+
+
 <div class="row">
     <div class=col-md-2></div>
     <div class=col-md-8>
@@ -134,6 +150,40 @@
                     </div>
                     <!------------>
                 </div>
+                
+                {% if ask_force %}
+                    <!-- Modal -->
+                    <div id="askForce" class="modal fade" role="dialog">
+                        <div class="modal-dialog modal-md">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <center><h4 class="modal-title">Ce PLTP a déjà été chargé, voulez-vous le recharger?</h4></center>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <form action="" method="POST">
+                                                {% csrf_token %}
+                                                <input name="exported" value="{{ exported }}" type="hidden">
+                                                <button type="submit" class="btn btn-primary btn-block" name="force" value="True">
+                                                        <span class="glyphicon glyphicon-ok"></span>&emsp;<b>Oui</b>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-6"></div>
+                                        <div class="col-sm-3">
+                                            <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">
+                                                <span class="glyphicon glyphicon-remove"></span>&emsp;<b>Non</b>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
                 
                 <div class="panel-footer">Version: {{ browser.version }}</div>
             </form>
