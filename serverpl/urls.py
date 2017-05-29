@@ -21,9 +21,6 @@ from django.shortcuts import render
 from jinja2 import Template
 
 def index(request):
-    print(request.session.keys())
-    request.session['cookie']=True
-    return render(request,Template(open('/tmp/bob.html','r').read()))
     return HttpResponse("""<html><body><a href="gitload/"> Load a Repo </A>
 <a href="PlayExo/"> Play exos </a>
 </body>
